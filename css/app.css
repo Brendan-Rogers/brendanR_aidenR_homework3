@@ -1,0 +1,15 @@
+
+
+.hidden {
+	display: none;
+}
+
+body {
+	width: 800px;
+	margin: 0 auto;
+}
+
+
+#gameCanvas {
+	border: 5px dashed red;
+}
