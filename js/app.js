@@ -4,17 +4,17 @@
 
 // VARIABLES
 
-// BACKGROUND vars
+// retrive gameCanvas from DOM
 let field = document.getElementById("gameCanvas");
+// BACKGROUND vars
 let background = field.getContext("2d");
 let imgBackground = new Image();
 imgBackground.src = "images/battlefield.svg";
-imgBackground.classList.add("backgroundZ");
 // ALIEN vars
 let alien1 = field.getContext("2d");
 let imgAlien1 = new Image();
 imgAlien1.src = "images/alien1.svg"
-imgAlien1.classList.add("alien1Z");
+
 
 // SCORE vars
 let score = 0;
