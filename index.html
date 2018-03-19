@@ -1,23 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Starship Troopers Html5 Game</title>
-</head>
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <title>STARSHIP TRAINING - THE GAME</title> 
+	<meta name="viewport" content="initial-scale=1.0, width=device-width">
+	<link href="https://fonts.googleapis.com/css?family=Share+Tech+Mono" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/foundation.css">
+	<link rel="stylesheet" type="text/css" href="css/app.css">
+  </head>
 <body>
-  <main>
-    <h1 class="hidden">starship troopers game</h1>
-    <section>
-      <h2 class="hidden">game stuff here</h2>
-      <p>this is some footer info</p>
-    </section>
-    <footer>
-      <h2 class="hidden">footer info</h2>
-<p>this is footer info</p>
-    </footer>
-  </main>
-  <script src="main.js"> </script>
+<main>
+	<!-- SECTIONING ELEMENT -->
+	<h2 id="timeBox"><span id="time">05:00</span></h2>
+	
+	<canvas id="gameCanvas"></canvas>
+
+	
+</main>	  
+<!-- at the bottom so the DOM gets built first, avoiding errors -->
+<script src="js/vendor/jquery.js"></script>
+<script src="js/vendor/what-input.js"></script>
+<script src="js/vendor/foundation.js"></script>
+<script src="js/app.js"></script>
 </body>
+
 </html>

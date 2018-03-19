@@ -1,0 +1,19 @@
+title: “TROOPER TRAINING”
+
+theme:
+	propaganda game for the World Government
+	themed like 50s future propaganda - an aesthetic used in the film
+
+abstract:
+	it’s wack-a-mole with aliens
+	aliens pop out of their holes
+	click aliens to destroy them
+
+rules:
+	you gotta click them for points
+	beat levels, go to the next one
+	ever level gets harder (aliens spawn and despawn faster)
+	you can only miss 3 aliens before you fail the mission
+	sometimes Human Soldiers spawn
+	if you accidentally kill 2 soldiers, you fail the mission
+	objective of the game: get a high score

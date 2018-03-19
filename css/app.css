@@ -1,0 +1,37 @@
+
+
+.hidden {
+	display: none;
+}
+
+body {
+	width: 800px;
+	margin: 0 auto;
+	cursor: url(../images/gun.png) 0 35, auto;
+}
+
+h2 {
+	font-family: 'Share Tech Mono';
+	text-align: center;
+}
+
+canvas {
+	border: 1px;
+}
+
+#timeBox {
+	position: absolute;
+	margin-top: 720px;
+	margin-left: 40px;
+	color: red;
+	font-size: 3em;
+}
+
+.backgroundZ {
+	z-index: 1;
+}
+
+.alien1Z {
+	z-index: 500;
+}
+
