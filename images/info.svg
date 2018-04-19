@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.68 209.47">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #e6e7e8;
+      }
+
+      .cls-2 {
+        font-size: 160px;
+        fill: #58595b;
+        font-family: Times-BoldItalic, Times;
+        font-weight: 700;
+        font-style: italic;
+      }
+    </style>
+  </defs>
+  <title>info</title>
+  <g id="circle">
+    <circle class="cls-1" cx="87.34" cy="87.34" r="87.34"/>
+  </g>
+  <g id="letter">
+    <text class="cls-2" transform="translate(61.67 141.34)">i</text>
+  </g>
+</svg>
