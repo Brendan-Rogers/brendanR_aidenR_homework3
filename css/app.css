@@ -19,7 +19,8 @@ canvas {
 	position: relative; 
 	border : thin solid black; 
 	display: block; 
-	margin: 0 auto 20px;  
+	margin: 0 auto 20px;
+	cursor: none; 
 }
 
 #timeBox {
