@@ -10,24 +10,29 @@ const   field = document.getElementById("gameCanvas"),
         gun = document.querySelector(".gun"),
         player = {width : 120, height : 120, speed : 10, x : 275, y : 630},
         mouseTracker = {x : field.width / 2},
-        alien1 = document.querySelector(".alien1")
-        alien2 = document.querySelector(".alien2")
-        alien3 = document.querySelector(".alien3")
+        alien1 = document.querySelector(".alien1"),
+        alien2 = document.querySelector(".alien2"),
+        alien3 = document.querySelector(".alien3"),
         aliens = [
-            { x: 095, y: 640, width: 75, height: 75, image: alien1, points: 05},
-            { x: 195, y: 640, width: 75, height: 75, image: alien2, points: 10},
-            { x: 300, y: 640, width: 75, height: 75, image: alien3, points: 20},
-            { x: 410, y: 640, width: 75, height: 75, image: alien1, points: 05},
-            { x: 520, y: 640, width: 75, height: 75, image: alien2, points: 10},
-            { x: 630, y: 640, width: 75, height: 75, image: alien3, points: 20}
+            { x: -700, y: 640, width: 75, height: 75, image: alien1, points: 05},
+            { x: -700, y: 640, width: 75, height: 75, image: alien2, points: 10},
+            { x: -700, y: 640, width: 75, height: 75, image: alien3, points: 20},
+            { x: -700, y: 640, width: 75, height: 75, image: alien1, points: 05},
+            { x: -700, y: 640, width: 75, height: 75, image: alien2, points: 10},
+            { x: -700, y: 640, width: 75, height: 75, image: alien3, points: 20}
         ],
-        hitMark = document.querySelector(".hit");
+        alienPos = [90, 195, 300, 410, 520, 630],
+        hitMark = document.querySelector(".hit"),
+        displayHit = document.querySelector(".displayHit"),
+        logoIMG = document.querySelector(".logo"),
+        infoTXT = document.querySelector(".updateInfo");
 
 let mousePos = 0,
-    count = 0,
     showReticle = false,
     retX = 0,
-    retY = 0;
+    retY = 0,
+    counterLMAO = 0
+    score = 0;
 
 
 // FUNCTIONS
@@ -55,6 +60,10 @@ function draw() {
         ctx.drawImage(hitMark, retX, retY, 52, 52)
     }
 
+    // draw SCORE
+    ctx.font = "30px Arial";
+    ctx.fillText(`SCORE : ${score}`,10,50);
+
     // LOOP the ANIMATION SEQUENCE
     window.requestAnimationFrame(draw);
 }
@@ -68,70 +77,60 @@ function createHitmark() {
     setTimeout(function() {
         showReticle = false;
     }, 500);
+
+    checkCollision();
 }
+
+
+function checkCollision() {
+    // for every Alien, check if the reticle is inside it on the X axis. If so, delete that bug
+    aliens.forEach((alienHit, index) => {
+
+        let alienIndex = index;
+
+        if (retX < alienHit.x + alienHit.width &&
+            retX + 52 > alienHit.x ) {
+
+                displayHit.innerHTML = `${alienIndex} IS HIT!`;
+                alienHit.x = -1000;
+                score += alienHit.points;
+
+        } 
+
+    });
+}
+
 
 function enemyRNG() {
 
+    aliens.forEach((alienLoad, index) => {
+
+        if ( Math.floor((Math.random() * 4) + 1) == 4 ) {
+            alienLoad.x = alienPos[index];
+        }
+
+    });
 }
+
+
 
 function movePlayer(e) {
     mousePos = (e.clientX - field.offsetLeft) - player.width / 2;
     mouseTracker.x = e.clientX - field.offsetLeft;
 }
 
-// function initImages() {
-//     console.log("initializing images");
-
-//     for (i = 0; i < 6; i++) { 
-//         alien[i] = field.getContext("2d");
-//         console.log(`Alien${i} has been initialized.`);
-//     }
-
-//     // NOT WORKING!!!!
-//     switch (i) {
-//         case 0:
-//             // apply imgAlien1 to DOM Variable alien[]
-//             alien[i].drawImage(imgAlien1, 90, 500, 100, 100);
-//             console.log("this triggered");
-//             break;
-//         case 1:
-//             alien[i].drawImage(imgAlien1, 180, 500, 100, 100);
-//             console.log("this triggered as well");
-
-//             break;
-//         case 2:
-//             alien[i].drawImage(imgAlien1, 270, 500, 100, 100);
-//             break;
-//         case 3:
-//             alien[i].drawImage(imgAlien1, 360, 500, 100, 100);
-//             break;
-//         case 4:
-//             alien[i].drawImage(imgAlien1, 450, 500, 100, 100);
-//             break;
-//         case 5:
-//             alien[i].drawImage(imgAlien1, 540, 500, 100, 100);
-//             break;
-//     }
-// }
-
-
-// LOAD ALIEN1 CONTEXT
-// imgAlien1.onload = function() {
-	
-	
-// }
-
 // EVENT HANDLERS
 
 window.requestAnimationFrame(draw);
 
-window.setInterval(enemyRNG, 1000);
+window.setInterval(enemyRNG, 700);
 
 field.addEventListener('mousemove', movePlayer);
 
 field.addEventListener('click', createHitmark);
 
 // TIMER
+
 function startTimer(duration, display) {
     let timer = duration, minutes, seconds;
 
@@ -151,7 +150,7 @@ function startTimer(duration, display) {
 
 window.onload = function () {
     let startMinutes = 60 * 2,
-        display = document.querySelector('#time');
+    display = document.querySelector('#time');
     startTimer(startMinutes, display);
 
     };

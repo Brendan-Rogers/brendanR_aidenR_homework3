@@ -60,3 +60,13 @@ canvas {
   	text-align: center;
 }
 
+.lowerOpacity {
+	opacity: 0;
+	transition: all 1s;
+}
+
+.raiseOpacity {
+	opacity: 1;
+	transition: all 1s;
+}
+
