@@ -5,71 +5,234 @@
 // VARIABLES
 
 // retrive gameCanvas from DOM
-let field = document.getElementById("gameCanvas");
-// BACKGROUND vars
-let background = field.getContext("2d");
-let imgBackground = new Image();
-imgBackground.src = "images/battlefield.svg";
-// ALIEN vars
-let alien1 = field.getContext("2d");
-let imgAlien1 = new Image();
-imgAlien1.src = "images/alien1.svg"
+const   field = document.getElementById("gameCanvas"),
+        ctx = field.getContext("2d"),
+        gun = document.querySelector(".gun"),
+        player = {width : 120, height : 120, speed : 10, x : 275, y : 630},
+        mouseTracker = {x : field.width / 2},
+        alien1 = document.querySelector(".alien1"),
+        alien2 = document.querySelector(".alien2"),
+        alien3 = document.querySelector(".alien3"),
+        aliens = [
+            { x: -700, y: 640, width: 75, height: 75, image: alien1, points: 05},
+            { x: -700, y: 640, width: 75, height: 75, image: alien2, points: 10},
+            { x: -700, y: 640, width: 75, height: 75, image: alien3, points: 20},
+            { x: -700, y: 640, width: 75, height: 75, image: alien1, points: 05},
+            { x: -700, y: 640, width: 75, height: 75, image: alien2, points: 10},
+            { x: -700, y: 640, width: 75, height: 75, image: alien3, points: 20},
+        ],
+        alienPos = [90, 195, 300, 410, 520, 630],
+        hitMark = document.querySelector(".hit"),
+        displayHit = document.querySelector(".displayHit"),
+        logoIMG = document.querySelector(".logo"),
+        infoTXT = document.querySelector(".updateInfo");
 
-
-// SCORE vars
-let score = 0;
-
+let mousePos = 0,
+    retX = 0,
+    retY = 0,
+    score = 0,
+    gameState = 0,
+    countdown = 15,
+    showReticle = false,
+    gameplay = false,
+    endScreen = false
+    pushStart = false;
 
 
 // FUNCTIONS
 
-// LOAD BACKGROUND CONTEXT
-imgBackground.onload = function() {
-	// set canvas size
-	field.width = 800;
-	field.height = 800;
-	// draw background(DOM element) as JS IMG at (xLocation, yLocation, xLength, yLength)
-    background.drawImage(imgBackground, 0, 0, 800, 800);
-    // confirm load
-    console.log("Background Loaded"); }
+// LOAD IMAGE CONTEXT
+function draw() {
+    // begin by CLEARING the ENTIRE PAGE
+    // eliminates ARTIFACTING
+    ctx.clearRect(0, 0, field.width, field.height);
 
-// LOAD ALIEN1 CONTEXT
-imgAlien1.onload = function() {
-	// apply imgAlien1 to DOM Variable alien1
-	alien1.drawImage(imgAlien1, 75, 500, 100, 100);
-	// confirm load
-	console.log("alien1 is loaded");
+    // draw ALIENS
+    aliens.forEach((alienBoy, index) => {
+        // drawImage (IMAGE, X-Pos, Y-Pos, WIDTH, HEIGHT)
+        ctx.drawImage(alienBoy.image, alienBoy.x, alienBoy.y, alienBoy.width, alienBoy.height);
+    });
+
+    // move GUN after MOUSE
+    dx = mousePos - player.x;
+    player.x += (dx / 3);
+    // draw GUN
+    ctx.drawImage(gun, player.x, player.y, player.width, player.height);
+
+
+    if (showReticle) {
+        ctx.drawImage(hitMark, retX, retY, 52, 52)
+    }
+
+    // draw SCORE if the game is OCCURING
+    if (gameplay) {
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "red";
+        ctx.fillText(`SCORE: ${score}`,80, 120);
+    }
+    
+    // load START of GAME
+    switch (gameState) {
+        case 1:
+            // draw the LOGO in the CENTER
+            ctx.drawImage(logoIMG, 160, 120, 500, 450);
+            break;
+        case 2:
+            ctx.font = "200px Share Tech Mono";
+            ctx.fillStyle = "black";
+            ctx.fillText("3", 350, 410);
+            break;
+        case 3:
+            ctx.font = "200px Share Tech Mono";
+            ctx.fillStyle = "black";
+            ctx.fillText("2", 350, 410);
+            break;
+        case 4:
+            ctx.font = "200px Share Tech Mono";
+            ctx.fillStyle = "black";
+            ctx.fillText("1", 350, 410);
+            break;
+        case 5:
+            ctx.font = "200px Share Tech Mono";
+            ctx.fillStyle = "black";
+            ctx.fillText("GO!", 270, 410);
+            break;
+        case 6:
+            // begin COUNTDOWN
+            gameplay = true;
+            break;
+    }
+
+    // draw COUNTDOWN
+    if (gameplay) {
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "red";
+        ctx.fillText(`TIME: ${countdown}`, 500, 120);
+    }
+
+    // ENDGAME
+
+    if (endScreen) {
+        // show SCORE
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "red";
+        ctx.fillText(`YOU SCORED: ${score}`, 200, 400);
+        // ask to TRY AGAIN
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "black";
+        ctx.fillText(`SHOOT GUN TO TRY AGAIN`, 100, 470);
+    }
+
+    if (pushStart == false) {
+        // intro to game
+        ctx.font = "60px Share Tech Mono";
+        ctx.fillStyle = "red";
+        ctx.fillText(`KILL ALIENS`, 230, 300);
+        // shoot to start
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "black";
+        ctx.fillText(`SHOOT (CLICK) TO BEGIN`, 100, 370);
+    }
+
+    // LOOP the ANIMATION SEQUENCE
+    window.requestAnimationFrame(draw);
 }
+
+function createHitmark() {
+    showReticle = true;
+
+    retX = player.x - 30;
+    retY = player.y + 8;
+
+    setTimeout(function() {
+        showReticle = false;
+    }, 500);
+
+    checkCollision();
+}
+
+
+function checkCollision() {
+    // for every Alien, check if the reticle is inside it on the X axis. If so, delete that bug
+    aliens.forEach((alienHit, index) => {
+        let alienIndex = index;
+
+        if (retX < alienHit.x + alienHit.width &&
+            retX + 52 > alienHit.x ) {
+                displayHit.innerHTML = `${alienIndex} IS HIT!`;
+                alienHit.x = -1000;
+                score += alienHit.points;
+        } 
+    });
+}
+
+function gameLoad() {
+    if (pushStart) {
+        gameState += 1;
+    }
+    
+
+    if (gameplay) {
+        countdown -= 1;
+    }
+
+    // THE GAME IS OVER
+    if (countdown <= 0) {
+        // END GAMEPLAY LOOP
+        gameplay = false;
+        endScreen = true;
+    }
+
+}
+
+function enemyRNG() {
+    aliens.forEach((alienLoad, index) => {
+        // generate alien IF 1/4 chance procs AND game is started
+        if ( Math.floor((Math.random() * 4) + 1) == 4 && gameplay) {
+            alienLoad.x = alienPos[index];
+        } else {
+            alienLoad.x = -500;
+        }
+    });
+}
+
+function movePlayer(e) {
+    mousePos = (e.clientX - field.offsetLeft) - player.width / 2;
+    mouseTracker.x = e.clientX - field.offsetLeft;
+}
+
+function gameChange() {
+    if (endScreen) {
+        //disable ENDSCREEN
+        endScreen = false;
+        //reset TIMER
+        countdown = 30;
+        //reset GAMESTATE
+        gameState = 0;
+        //reset SCORE
+        score = 0;
+    }
+
+    if (pushStart == false) {
+        // set PUSHSTART to TRUE, triggering GAMESTATE
+        pushStart = true;
+    }
+}
+
 
 // EVENT HANDLERS
 
+window.requestAnimationFrame(draw);
 
-// TEST TIMER
-function startTimer(duration, display) {
-    let timer = duration, minutes, seconds;
+window.setInterval(enemyRNG, 1200);
 
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10)
-        seconds = parseInt(timer % 60, 10);
+window.setInterval(gameLoad, 1000);
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+field.addEventListener('mousemove', movePlayer);
 
-        display.textContent = minutes + ":" + seconds;
+field.addEventListener('click', createHitmark);
 
-        if (--timer < 0) {
-            timer = duration;
-        }
-    }, 1000);
-}
-
-window.onload = function () {
-    let startMinutes = 60 * 2,
-        display = document.querySelector('#time');
-    startTimer(startMinutes, display);
-};
-
-
+field.addEventListener('click', gameChange);
 
 }) ();
 
