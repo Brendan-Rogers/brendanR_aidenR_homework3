@@ -23,9 +23,9 @@ const   field = document.getElementById("gameCanvas"),
         ],
         alienPos = [90, 195, 300, 410, 520, 630],
         hitMark = document.querySelector(".hit"),
-        displayHit = document.querySelector(".displayHit"),
-        logoIMG = document.querySelector(".logo"),
-        infoTXT = document.querySelector(".updateInfo");
+        // displayHit = document.querySelector(".displayHit"),
+        logoIMG = document.querySelector(".logo");
+        // infoTXT = document.querySelector(".updateInfo");
 
 let mousePos = 0,
     retX = 0,
@@ -75,7 +75,7 @@ function draw() {
     switch (gameState) {
         case 1:
             // draw the LOGO in the CENTER
-            ctx.drawImage(logoIMG, 160, 120, 500, 450);
+            ctx.drawImage(logoIMG, 160, 120, 500, 500);
             break;
         case 2:
             ctx.font = "200px Share Tech Mono";
@@ -127,7 +127,7 @@ function draw() {
         // intro to game
         ctx.font = "60px Share Tech Mono";
         ctx.fillStyle = "red";
-        ctx.fillText(`KILL ALIENS`, 230, 300);
+        ctx.fillText(`KILL BUGS`, 245, 300);
         // shoot to start
         ctx.font = "50px Share Tech Mono";
         ctx.fillStyle = "black";
@@ -159,7 +159,7 @@ function checkCollision() {
 
         if (retX < alienHit.x + alienHit.width &&
             retX + 52 > alienHit.x ) {
-                displayHit.innerHTML = `${alienIndex} IS HIT!`;
+                // displayHit.innerHTML = `${alienIndex} IS HIT!`;
                 alienHit.x = -1000;
                 score += alienHit.points;
         } 

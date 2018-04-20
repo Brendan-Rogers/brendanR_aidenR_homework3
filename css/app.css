@@ -15,9 +15,7 @@ h2 {
 }
 
 canvas {
-	border: 1px;
 	position: relative; 
-	border : thin solid black; 
 	display: block; 
 	margin: 0 auto 20px;
 	cursor: none; 
@@ -54,7 +52,7 @@ canvas {
 }
 
 .bckgrd {
-	background: url("../images/battlefield.svg") no-repeat;
+	background: url("../images/background.png") no-repeat;
   	height: 1000px;
   	width: 800px;
   	margin: 0 auto;
