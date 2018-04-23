@@ -32,7 +32,9 @@ let mousePos = 0,
     retY = 0,
     score = 0,
     gameState = 0,
-    countdown = 15,
+    respawnTime = 1200,
+    countdown = 5,
+    ascension = 0,
     showReticle = false,
     gameplay = false,
     endScreen = false
@@ -66,9 +68,7 @@ function draw() {
 
     // draw SCORE if the game is OCCURING
     if (gameplay) {
-        ctx.font = "50px Share Tech Mono";
-        ctx.fillStyle = "red";
-        ctx.fillText(`SCORE: ${score}`,80, 120);
+        
     }
     
     // load START of GAME
@@ -103,11 +103,21 @@ function draw() {
             break;
     }
 
-    // draw COUNTDOWN
     if (gameplay) {
+        //draw COUNTDOWN
         ctx.font = "50px Share Tech Mono";
         ctx.fillStyle = "red";
         ctx.fillText(`TIME: ${countdown}`, 500, 120);
+        // draw SCORE
+        ctx.font = "50px Share Tech Mono";
+        ctx.fillStyle = "red";
+        ctx.fillText(`SCORE: ${score}`,80, 120);
+        // draw ASCENsion
+        if (ascension > 0) {
+            ctx.font = "50px Share Tech Mono";
+            ctx.fillStyle = "red";
+            ctx.fillText(`ASCENSION: ${ascension}`,250, 180);
+        }
     }
 
     // ENDGAME
@@ -118,9 +128,9 @@ function draw() {
         ctx.fillStyle = "red";
         ctx.fillText(`YOU SCORED: ${score}`, 200, 400);
         // ask to TRY AGAIN
-        ctx.font = "50px Share Tech Mono";
+        ctx.font = "30px Share Tech Mono";
         ctx.fillStyle = "black";
-        ctx.fillText(`SHOOT GUN TO TRY AGAIN`, 100, 470);
+        ctx.fillText(`LEVEL UP! ITS GETTING HARDER...`, 150, 470);
     }
 
     if (pushStart == false) {
@@ -188,7 +198,7 @@ function gameLoad() {
 function enemyRNG() {
     aliens.forEach((alienLoad, index) => {
         // generate alien IF 1/4 chance procs AND game is started
-        if ( Math.floor((Math.random() * 4) + 1) == 4 && gameplay) {
+        if ( Math.floor((Math.random() * 3) + 1) == 3 && gameplay) {
             alienLoad.x = alienPos[index];
         } else {
             alienLoad.x = -500;
@@ -202,21 +212,28 @@ function movePlayer(e) {
 }
 
 function gameChange() {
-    if (endScreen) {
-        //disable ENDSCREEN
-        endScreen = false;
-        //reset TIMER
-        countdown = 30;
-        //reset GAMESTATE
-        gameState = 0;
-        //reset SCORE
-        score = 0;
-    }
-
+    
     if (pushStart == false) {
         // set PUSHSTART to TRUE, triggering GAMESTATE
         pushStart = true;
     }
+
+    setTimeout(function () {
+        if (endScreen) {
+            //disable ENDSCREEN
+            endScreen = false;
+            //reset TIMER
+            countdown = 10;
+            //reset GAMESTATE
+            gameState = 0;
+            //reset SCORE
+            score = 0;
+            //increse DIFICULTY
+            respawnTime -= 200;
+            //increase ASCENSION
+            ascension += 1;
+        }
+    }, 7000);
 }
 
 
@@ -224,7 +241,7 @@ function gameChange() {
 
 window.requestAnimationFrame(draw);
 
-window.setInterval(enemyRNG, 1200);
+window.setInterval(enemyRNG, respawnTime);
 
 window.setInterval(gameLoad, 1000);
 
